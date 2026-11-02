@@ -1,0 +1,35 @@
+---
+import type { InferGetStaticPropsType } from "astro";
+import { getCollection, render } from "astro:content";
+import FacultyContact from "../components/FacultyContact.astro";
+import Publications from "../components/Publications.astro";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import { pagePath } from "../lib/routes";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+  return pages.map((page) => ({
+    params: {
+      path:
+        pagePath(page.data.lang, page.data.section).slice(1, -1) || undefined,
+    },
+    props: { page },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { page } = Astro.props;
+const { title, lang, section } = page.data;
+const { Content } = await render(page);
+---
+
+<SiteLayout title={title} lang={lang} section={section}>
+  {section === "yu-chen" && (
+    <>
+      <h1>{title}</h1>
+      <FacultyContact lang={lang} />
+    </>
+  )}
+  <Content />
+  {section === "publications" && <Publications lang={lang} />}
+</SiteLayout>

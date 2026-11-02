@@ -1,0 +1,281 @@
+media:
+  input: public/media
+  output: /media
+content:
+  - name: en_index
+    label: English · Home
+    type: file
+    path: src/content/pages/en/index.md
+    fields:
+      - &page-title
+        name: title
+        label: Page title
+        type: string
+        required: true
+      - &en-language
+        name: lang
+        type: string
+        hidden: true
+        default: en
+      - name: section
+        type: string
+        hidden: true
+        default: home
+      - &page-body
+        name: body
+        label: Content
+        type: rich-text
+  - name: en_research
+    label: English · Research
+    type: file
+    path: src/content/pages/en/research.md
+    fields:
+      - *page-title
+      - *en-language
+      - name: section
+        type: string
+        hidden: true
+        default: research
+      - *page-body
+  - name: en_publications
+    label: English · Publications introduction
+    type: file
+    path: src/content/pages/en/publications.md
+    fields:
+      - *page-title
+      - *en-language
+      - name: section
+        type: string
+        hidden: true
+        default: publications
+      - *page-body
+  - name: en_people
+    label: English · People
+    type: file
+    path: src/content/pages/en/people.md
+    fields:
+      - *page-title
+      - *en-language
+      - name: section
+        type: string
+        hidden: true
+        default: people
+      - *page-body
+  - name: en_join
+    label: English · Join us
+    type: file
+    path: src/content/pages/en/join.md
+    fields:
+      - *page-title
+      - *en-language
+      - name: section
+        type: string
+        hidden: true
+        default: join
+      - *page-body
+  - name: en_yu_chen
+    label: English · Yu Chen · biography
+    type: file
+    path: src/content/pages/en/yu-chen.md
+    fields:
+      - *page-title
+      - *en-language
+      - name: section
+        type: string
+        hidden: true
+        default: yu-chen
+      - *page-body
+  - name: en_yong_xiang
+    label: English · Yong Xiang · biography
+    type: file
+    path: src/content/pages/en/yong-xiang.md
+    fields:
+      - *page-title
+      - *en-language
+      - name: section
+        type: string
+        hidden: true
+        default: yong-xiang
+      - *page-body
+  - name: zh_index
+    label: 中文 · Home
+    type: file
+    path: src/content/pages/zh/index.md
+    fields:
+      - *page-title
+      - &zh-language
+        name: lang
+        type: string
+        hidden: true
+        default: zh
+      - name: section
+        type: string
+        hidden: true
+        default: home
+      - *page-body
+  - name: zh_research
+    label: 中文 · Research
+    type: file
+    path: src/content/pages/zh/research.md
+    fields:
+      - *page-title
+      - *zh-language
+      - name: section
+        type: string
+        hidden: true
+        default: research
+      - *page-body
+  - name: zh_publications
+    label: 中文 · Publications introduction
+    type: file
+    path: src/content/pages/zh/publications.md
+    fields:
+      - *page-title
+      - *zh-language
+      - name: section
+        type: string
+        hidden: true
+        default: publications
+      - *page-body
+  - name: zh_people
+    label: 中文 · People
+    type: file
+    path: src/content/pages/zh/people.md
+    fields:
+      - *page-title
+      - *zh-language
+      - name: section
+        type: string
+        hidden: true
+        default: people
+      - *page-body
+  - name: zh_join
+    label: 中文 · Join us
+    type: file
+    path: src/content/pages/zh/join.md
+    fields:
+      - *page-title
+      - *zh-language
+      - name: section
+        type: string
+        hidden: true
+        default: join
+      - *page-body
+  - name: zh_yu_chen
+    label: 中文 · Yu Chen · biography
+    type: file
+    path: src/content/pages/zh/yu-chen.md
+    fields:
+      - *page-title
+      - *zh-language
+      - name: section
+        type: string
+        hidden: true
+        default: yu-chen
+      - *page-body
+  - name: zh_yong_xiang
+    label: 中文 · Yong Xiang · biography
+    type: file
+    path: src/content/pages/zh/yong-xiang.md
+    fields:
+      - *page-title
+      - *zh-language
+      - name: section
+        type: string
+        hidden: true
+        default: yong-xiang
+      - *page-body
+  - name: publications
+    label: Publications · shared across languages
+    type: collection
+    path: src/content/publications
+    filename: "{year}-{primary}"
+    view:
+      primary: title
+      fields:
+        - title
+        - year
+        - venue
+      sort: year
+      order: desc
+    fields:
+      - name: title
+        label: Paper title
+        type: string
+        required: true
+      - name: authors
+        label: Authors (in publication order)
+        type: text
+        required: true
+      - name: venue
+        label: Venue and year (e.g. SOSP 2024)
+        type: string
+        required: true
+      - name: year
+        label: Publication year
+        type: number
+        required: true
+      - name: order
+        label: Order within year (lower numbers first)
+        type: number
+        default: 0
+      - name: paperUrl
+        label: Paper URL (optional)
+        type: string
+      - name: codeUrl
+        label: Code URL (optional)
+        type: string
+  - name: lab
+    label: Lab identity
+    type: file
+    path: src/data/lab.json
+    format: json
+    fields:
+      - name: name
+        type: string
+        required: true
+      - name: title
+        type: string
+        required: true
+      - name: titleZh
+        type: string
+        required: true
+      - name: department
+        type: string
+        required: true
+      - name: departmentZh
+        type: string
+        required: true
+      - name: university
+        type: string
+        required: true
+      - name: universityZh
+        type: string
+        required: true
+  - name: profile
+    label: Yu Chen · profile and contact details
+    type: file
+    path: src/data/yu-chen.json
+    format: json
+    fields:
+      - name: position
+        type: string
+        required: true
+      - name: positionZh
+        type: string
+        required: true
+      - name: email
+        type: string
+        required: true
+      - name: phone
+        type: string
+        required: true
+      - name: address
+        type: text
+        required: true
+      - name: addressZh
+        type: text
+        required: true
+      - name: githubUrl
+        type: string
+        required: true

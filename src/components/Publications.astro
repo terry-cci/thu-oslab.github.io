@@ -1,0 +1,78 @@
+---
+import { getCollection } from "astro:content";
+import type { Language } from "../lib/routes";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const zh = lang === "zh";
+const papers = (await getCollection("publications")).sort(
+  (a, b) =>
+    b.data.year - a.data.year ||
+    a.data.order - b.data.order ||
+    a.id.localeCompare(b.id),
+);
+const groups = [...Map.groupBy(papers, ({ data }) => data.year)];
+---
+
+<nav
+  class="year-index"
+  aria-label={zh ? "按年份浏览论文" : "Publications by year"}
+>
+  {groups.map(([year]) => (
+    <a href={`#year-${year}`}>{year}</a>
+  ))}
+</nav>
+{groups.map(([year, publications]) => (
+  <section aria-labelledby={`year-${year}`}>
+    <h2 id={`year-${year}`}>{year}</h2>
+    <ul>
+      {publications.map(({ data }) => (
+        <li>
+          <strong>{data.title}</strong>
+          <br />
+          <span class="paper-authors">{data.authors}</span>
+          <br />
+          <span class="paper-venue">{data.venue}</span>
+          {data.paperUrl && (
+            <>
+              {" "}
+              · <a href={data.paperUrl}>{zh ? "论文" : "Paper"}</a>
+            </>
+          )}
+          {data.codeUrl && (
+            <>
+              {" "}
+              · <a href={data.codeUrl}>{zh ? "代码" : "Code"}</a>
+            </>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+))}
+
+<style>
+  .paper-authors,
+  .paper-venue,
+  .year-index {
+    font-size: 0.9rem;
+  }
+
+  .year-index {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 1rem;
+  }
+
+  .paper-venue {
+    font-style: italic;
+  }
+
+  h2 {
+    scroll-margin-top: 1rem;
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+import SiteHeader from "../components/SiteHeader.astro";
+import lab from "../data/lab.json";
+import {
+  LANGUAGES,
+  languageTag,
+  pageUrl,
+  type Language,
+  type Section,
+} from "../lib/routes";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  lang: Language;
+  section: Section;
+}
+
+const { title, lang, section } = Astro.props;
+const zh = lang === "zh";
+const canonical = new URL(pageUrl(lang, section), Astro.site);
+const description = zh
+  ? `${lab.universityZh}${lab.departmentZh}${lab.titleZh}。研究操作系统、系统软件、性能、可靠性与安全。`
+  : `${lab.title}, ${lab.department}, ${lab.university}. Research in operating systems, performance, reliability, and security.`;
+---
+
+<!doctype html>
+<html lang={languageTag(lang)}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} · {lab.name}</title>
+    <link rel="canonical" href={canonical} />
+    {LANGUAGES.map((language) => (
+      <link
+        rel="alternate"
+        hreflang={languageTag(language)}
+        href={new URL(pageUrl(language, section), Astro.site)}
+      />
+    ))}
+  </head>
+  <body>
+    <SiteHeader lang={lang} section={section} />
+    <main id="main">
+      <article
+        class:list={{ "home-overview": section === "home" }}
+        aria-label={title}
+      >
+        <slot />
+      </article>
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    width: calc(100% - 2rem);
+    max-width: 45rem;
+    margin: 1rem auto 3rem;
+    overflow-wrap: anywhere;
+  }
+
+  main {
+    padding-inline: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  /* Keep the repeated Markdown homepage heading accessible. */
+  .home-overview > :global(h1:first-child) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

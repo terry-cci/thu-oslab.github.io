@@ -1,0 +1,156 @@
+---
+import lab from "../data/lab.json";
+import {
+  languageTag,
+  navigationSection,
+  pageUrl,
+  type Language,
+  type Section,
+} from "../lib/routes";
+
+interface Props {
+  lang: Language;
+  section: Section;
+}
+
+const { lang, section } = Astro.props;
+const zh = lang === "zh";
+const alternateLanguage = zh ? "en" : "zh";
+const alternateLanguageTag = languageTag(alternateLanguage);
+const activeSection = navigationSection(section);
+const navigation = [
+  { section: "research", label: { en: "Research", zh: "研究" } },
+  { section: "publications", label: { en: "Publications", zh: "论文" } },
+  { section: "people", label: { en: "People", zh: "成员" } },
+  { section: "join", label: { en: "Join us", zh: "加入我们" } },
+] as const;
+---
+
+<header>
+  <a
+    class="language"
+    href={pageUrl(alternateLanguage, section)}
+    lang={alternateLanguageTag}
+    hreflang={alternateLanguageTag}
+  >
+    {zh ? "English" : "中文"}
+  </a>
+  <a
+    class="masthead"
+    href={pageUrl(lang, "home")}
+    aria-current={section === "home" ? "page" : undefined}
+    aria-label={zh ? `${lab.name} 首页` : `${lab.name} home`}
+  >
+    <p class="site-name">{lab.name}</p>
+    <p class="site-title">
+      {zh ? (
+        `${lab.universityZh}${lab.titleZh}`
+      ) : (
+        <>
+          {lab.title}
+          <span class="site-university">{lab.university}</span>
+        </>
+      )}
+    </p>
+  </a>
+  <nav class="navigation" aria-label={zh ? "主导航" : "Main navigation"}>
+    {navigation.map(({ section: item, label }) => (
+      <a
+        href={pageUrl(lang, item)}
+        aria-current={activeSection === item ? "page" : undefined}
+      >
+        {label[lang]}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  header {
+    padding-inline: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .language {
+    display: block;
+    width: fit-content;
+    margin: -0.5rem -0.5rem 0.25rem auto;
+    padding: 0.5rem;
+    color: var(--color-language);
+    font-size: smaller;
+    font-weight: bold;
+  }
+
+  .masthead {
+    display: block;
+    color: inherit;
+    text-align: center;
+  }
+
+  .masthead:hover {
+    text-decoration: none;
+  }
+
+  .site-name,
+  .site-title {
+    margin: 0;
+  }
+
+  .site-name {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--color-accent);
+  }
+
+  .site-title {
+    font-size: 1.2rem;
+  }
+
+  .site-university {
+    display: block;
+    font-size: smaller;
+  }
+
+  .navigation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-block: 0.75rem;
+    text-align: center;
+  }
+
+  .navigation a {
+    padding: 0.8rem 1rem;
+    color: var(--color-accent);
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 100ms;
+  }
+
+  .navigation a:hover {
+    background-color: var(--color-navigation-hover);
+  }
+
+  @media (min-width: 46rem) {
+    .masthead {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0 1rem;
+      text-align: left;
+    }
+
+    .site-university {
+      display: inline;
+      font-size: inherit;
+    }
+
+    .site-university::before {
+      content: ", ";
+    }
+
+    .navigation {
+      flex-direction: row;
+    }
+  }
+</style>

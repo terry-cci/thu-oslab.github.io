@@ -1,0 +1,30 @@
+---
+import profile from "../data/yu-chen.json";
+import type { Language } from "../lib/routes";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const zh = lang === "zh";
+---
+
+<address class="contact">
+  <strong>{zh ? profile.positionZh : profile.position}</strong>
+  <br />
+  <a href={`mailto:${profile.email}`}>{profile.email}</a>
+  <span aria-hidden="true"> · </span>
+  <a href={profile.githubUrl}>GitHub</a>
+  <span aria-hidden="true"> · </span>
+  <a href={`tel:${profile.phone.replace(/[^+\d]/g, "")}`}>{profile.phone}</a>
+  <br />
+  {zh ? profile.addressZh : profile.address}
+</address>
+
+<style>
+  .contact {
+    font-size: 0.9rem;
+    font-style: normal;
+  }
+</style>
